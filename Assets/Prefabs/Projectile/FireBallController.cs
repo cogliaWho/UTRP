@@ -8,6 +8,8 @@ public class FireBallController : MonoBehaviour {
 
 	private bool hit = false;
 	private float direction;
+
+	public Animator anim;
 	// Use this for initialization
 	void Start () {
 		direction = GameObject.Find("Player").GetComponent<PlayerControls>().GetFacingDirection();
@@ -21,6 +23,19 @@ public class FireBallController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		rigidbody2D.velocity = new Vector2 (speed * direction, rigidbody2D.velocity.y);
+		if(hit)
+			rigidbody2D.velocity = new Vector2 (0, rigidbody2D.velocity.y);
+		else
+			rigidbody2D.velocity = new Vector2 (speed * direction, rigidbody2D.velocity.y);
+	}
+
+	void OnTriggerEnter2D(Collider2D other) {
+		hit = true;
+		collider2D.enabled = false;
+		anim.SetTrigger ("hit");
+	}
+
+	void Destroy(){
+		Destroy(this.gameObject);
 	}
 }

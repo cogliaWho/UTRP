@@ -40,7 +40,7 @@ public class PlayerControls : MonoBehaviour {
 		float move = Input.GetAxis ("Horizontal");
 		anim.SetFloat("Speed", Mathf.Abs(move));
 
-		rigidbody2D.velocity = new Vector2 (move * maxSpeed, rigidbody2D.velocity.y);
+		rigidbody2D.AddForce(new Vector2 (move * maxSpeed, rigidbody2D.velocity.y) - rigidbody2D.velocity, ForceMode2D.Force);
 
 		if (move > 0 && !facingRight)
 			Flip ();
@@ -60,7 +60,7 @@ public class PlayerControls : MonoBehaviour {
 			}
 		}
 
-		if (grounded && (Time.time > nextShoot) && Input.GetButtonDown ("Fire1")) {
+		if (!doubleJump && (Time.time > nextShoot) && Input.GetButtonDown ("Fire1")) {
 			nextShoot = Time.time + fastShootCooldown;
 			anim.SetTrigger("FastShoot");
 		} 
@@ -74,7 +74,10 @@ public class PlayerControls : MonoBehaviour {
 	}
 
 	void ShootFastShoot(){
-		GameObject fireBallClone = Instantiate(fireBall, shotSpawn.position, shotSpawn.rotation) as GameObject;
+		if(facingRight)
+			Instantiate(fireBall, new Vector3(shotSpawn.position.x+0.1f,shotSpawn.position.y,shotSpawn.position.z), shotSpawn.rotation);
+		else
+			Instantiate(fireBall, new Vector3(shotSpawn.position.x-0.1f,shotSpawn.position.y,shotSpawn.position.z), shotSpawn.rotation);
 	}
 
 	public float GetFacingDirection(){
