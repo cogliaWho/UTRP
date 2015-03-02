@@ -19,6 +19,8 @@ public class PlayerControls : MonoBehaviour {
 	//shoot
 	bool isShooting = false;
 	float nextShoot;
+	public GameObject fireBall;
+	public Transform shotSpawn;
 
 	Animator anim;
 	
@@ -69,5 +71,16 @@ public class PlayerControls : MonoBehaviour {
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
+	}
+
+	void ShootFastShoot(){
+		GameObject fireBallClone = Instantiate(fireBall, shotSpawn.position, shotSpawn.rotation) as GameObject;
+	}
+
+	public float GetFacingDirection(){
+		if (facingRight)
+			return 1f;
+		else
+			return -1f;
 	}
 }
